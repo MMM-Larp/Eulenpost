@@ -25,7 +25,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))
                 .and()
             .authorizeRequests()
-                .antMatchers("/", LOGIN, "/login/auth", ACCESS_DENIED, "/resource/**").permitAll()
+                .antMatchers("/", LOGIN, "/login/auth", ACCESS_DENIED, "/resource/**", "/register").permitAll()
                 .antMatchers("/**").hasAnyRole("ADMIN")
                 .and()
             .formLogin()

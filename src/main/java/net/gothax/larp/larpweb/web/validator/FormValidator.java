@@ -5,9 +5,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Component
 public class FormValidator implements Validator {
@@ -18,24 +15,19 @@ public class FormValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        rejectIfNoEmail(errors, "email");
+        rejectIfNoEmail(errors);
     }
 
-    private void rejectIfNoEmail(Errors errors, String email) {
-        String value = (String) errors.getFieldValue(email);
-        if(!isEmail(value) && !Objects.requireNonNull(value).isEmpty())
-            errors.rejectValue(email, "required", "Ungültige E-Mail Adresse!");
+    private void rejectIfNoEmail(Errors errors) {
+        String value = (String) errors.getFieldValue("email");
+        if(value != null) {
+            if (!isEmail(value) && !value.isEmpty())
+                errors.rejectValue("email", "required", "Ungültige E-Mail Adresse!");
+        }
     }
 
     private boolean isEmail(String email) {
-        //String regex = "^[^@\\s]+@([-a-z0-9]+\\.)+[a-z]{2,}$";
-        //return isStringRegex(email, regex);
         return email.matches("^[^@\\s]+@([-a-z0-9]+\\.)+[a-z]{2,}$");
     }
 
-    /*private boolean isStringRegex(String string, String regex) {
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(string);
-        return matcher.matches();
-    }*/
 }
