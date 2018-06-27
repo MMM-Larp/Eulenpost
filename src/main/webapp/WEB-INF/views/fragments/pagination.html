@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+<ul th:fragment="pagination(pages)" class="pagination">
+  <li th:class="${pages.currentPage <= 1}? 'disabled' : ''">
+    <a th:if="${pages.currentPage <= 1}">Zurück</a>
+    <a th:if="not ${pages.currentPage <= 1}" th:href="@{${pages.url}+${pages.currentPage-1}}">Zurück</a>
+  </li>
+
+  <th:block th:if="not ${pages.currentPage-pages.steps <= 0}">
+    <li>
+      <a th:href="@{${pages.url}+1}">1</a>
+    </li>
+    <li class="disabled">
+      <a>...</a>
+    </li>
+  </th:block>
+
+  <li th:each="page : ${#numbers.sequence(pages.minPage, pages.maxPage)}" th:class="${page-1 == pages.currentPage}? 'active' : ''">
+    <a th:href="@{${pages.url}+${page}}" th:text="${page}"></a>
+  </li>
+
+  <th:block th:if="${pages.currentPage+pages.steps < pages.size}">
+    <li class="disabled">
+      <a>...</a>
+    </li>
+    <li>
+      <a th:href="@{${pages.url}+${pages.size}}" th:text="${pages.size}">max</a>
+    </li>
+  </th:block>
+
+  <li th:class="${pages.currentPage+1 >= pages.size}? 'disabled' : ''">
+    <a th:if="${pages.currentPage+1 >= pages.size}">Weiter</a>
+    <a th:if="not ${pages.currentPage+1 >= pages.size}" th:href="@{${pages.url}+${pages.currentPage+1}}">Weiter</a>
+  </li>
+</ul>
+
+</body>
+</html>

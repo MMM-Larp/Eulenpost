@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <th:block th:insert="fragments/initPage"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/resource/themes/termin-app/css/bookings.css}"/>
+  <script th:src="@{/resource/js/lib/require.js}" th:data-main="@{/resource/js/bookingsApp}"></script>
+</head>
+
+<body>
+
+<div th:replace="fragments/navigation :: navigation('booking-manager')">Navigation</div>
+
+<div class="container">
+  <div class="page-header">
+    <h1>Anmeldungen <small>Übersicht der Buchungen für Lehrgänge</small></h1>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <form id="frmBookingFilter" th:action="@{/management/booking-manager/submitBookingFilter}" th:object="${filter}" class="form-inline well" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+          <label class="control-label" for="personLastName">Personenname</label>
+          <input th:field="*{personLastName}" id="personLastName" name="personLastName" class="form-control" placeholder="Personenname" />
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="companyName">Firmenname</label>
+          <input th:field="*{companyName}" id="companyName" name="companyName" class="form-control" placeholder="Firmenname" />
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="active">Status</label>
+          <select th:field="*{active}" id="active" name="active"class="form-control">
+            <option value="-1"></option>
+            <option value="1">Aktiv</option>
+            <option value="0">Nicht aktiv</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="btnSubmit">&nbsp;</label>
+          <input type="submit" class="form-control btn btn-info" value="Filtern" id="btnSubmit" name="btnSubmit"/>
+        </div>
+        <div class="form-group">
+          <label class="control-label">&nbsp;</label>
+          <a th:href="@{/management/booking-manager/resetBookingFilter}" class="form-control btn btn-default">Zurücksetzen</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <table id="bookingTable" class="table table-striped">
+        <thead>
+        <tr>
+          <th>
+            <a th:href="@{/management/booking-manager/sort/createdAt/{filter}(filter=(${bookings?.sort?.getOrderFor('createdAt')?.ascending} ? 'desc' : 'asc'))}">
+              <span th:if="${bookings?.sort?.getOrderFor('createdAt')?.ascending}" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+              <span th:if="${bookings?.sort?.getOrderFor('createdAt')?.descending}" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+              Buchungsdatum
+            </a>
+          </th>
+          <th>
+            <a th:href="@{/management/booking-manager/sort/personLastName/{filter}(filter=(${bookings?.sort?.getOrderFor('personLastName')?.ascending} ? 'desc' : 'asc'))}">
+              <span th:if="${bookings?.sort?.getOrderFor('personLastName')?.ascending}" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+              <span th:if="${bookings?.sort?.getOrderFor('personLastName')?.descending}" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+              Name
+            </a>
+          </th>
+          <th>
+            <a th:href="@{/management/booking-manager/sort/companyName/{filter}(filter=(${bookings?.sort?.getOrderFor('companyName')?.ascending} ? 'desc' : 'asc'))}">
+              <span th:if="${bookings?.sort?.getOrderFor('companyName')?.ascending}" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+              <span th:if="${bookings?.sort?.getOrderFor('companyName')?.descending}" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+              Unternehmen
+            </a>
+          </th>
+          <th>Lehrgang</th>
+          <th>
+            <a th:href="@{/management/booking-manager/sort/active/{filter}(filter=(${bookings?.sort?.getOrderFor('active')?.ascending} ? 'desc' : 'asc'))}">
+              <span th:if="${bookings?.sort?.getOrderFor('active')?.ascending}" class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+              <span th:if="${bookings?.sort?.getOrderFor('active')?.descending}" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+              Aktiviert
+            </a>
+          </th>
+          <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tr th:each="booking : ${bookings}" class="xm-table-row unselectedRow" th:name="${booking.id}">
+          <td>
+            <span th:text="${#dates.format(booking.createdAt, 'dd.MM.yyyy HH:mm')}" th:remove="tag">Neu</span>
+            <span class="label label-success" th:if="${(#dates.createNow().getTime() - booking.createdAt.getTime()) <= 86400000}">Neu</span>
+          </td>
+          <td>[[${booking.personLastName}]], [[${booking.personFirstName}]]</td>
+          <td>
+            <span th:if="not ${#lists.isEmpty(booking.sessionBookings)}" class="badge pull-right" th:text="${booking.sessionBookings.size()}"></span>
+            [[${booking.companyName}]]
+          </td>
+          <td th:if="${#lists.isEmpty(booking.sessionBookings)}">&nbsp;</td>
+          <td th:if="not ${#lists.isEmpty(booking.sessionBookings)}">
+            <ul class="session-booking-list">
+              <li th:each="sessionBooking : ${booking.sessionBookings}">
+                <div class="session-booking-subitem type-item" th:text="${sessionBooking.type}">Type</div>
+                <div class="session-booking-subitem recurrence-item" th:if="${sessionBooking.recurrence
+                 != null}" th:text="${sessionBooking.recurrence}">Wiederholbar?</div>
+                <div class="session-booking-subitem date-item" th:text="${#dates.format(sessionBooking.startDate, 'dd.MM.yyyy HH:mm')}">Datum</div>
+                <div class="session-booking-subitem location-item" th:text="${sessionBooking.location}">Ort</div>
+              </li>
+            </ul>
+          </td>
+          <td class="activation-column">
+            <span th:if="${booking.active}" class="glyphicon glyphicon-ok"></span>
+            <th:block th:if="${booking.activationDate != null}">
+              <span class="activation-date" th:text="${#dates.format(booking.activationDate, 'dd.MM.yyyy HH:mm')}"></span>
+              <span class="activation-user actor-user">([[${booking.activationUser}]])</span>
+            </th:block>
+            <a th:unless="${booking.active}" class="btn btn-info" data-loading-text="Warten...">Aktivieren</a>
+          </td>
+          <td>
+            <div class="inline-toolbar">
+              <span class="cmd-edit glyphicon glyphicon-pencil"></span>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+      <div th:replace="fragments/pagination :: pagination(${pagination})">Footer</div>
+    </div>
+  </div>
+
+</div>
+
+<div th:replace="fragments/footer :: footer">Footer</div>
+
+</body>
+</html>

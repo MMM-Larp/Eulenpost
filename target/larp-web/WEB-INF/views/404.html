@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <th:block th:insert="fragments/initPage"/>
+</head>
+
+<body>
+
+<div th:replace="fragments/navigation :: navigation('404')">Navigation</div>
+
+<div class="container">
+
+  <div class="row">
+    <div class="col-md-1">
+      &nbsp;
+    </div>
+    <div class="col-md-10">
+      <div class="page-header">
+        <h1>Seite nicht gefunden <small>Leider kann Ihre Anfrage nicht bearbeitet werden.</small></h1>
+      </div>
+
+      <div class="alert alert-warning">
+        <h4 class="alert-heading">Seite nicht gefunden (404)</h4>
+        Die Seite die Sie suchen kann auf diesem Server leider nicht gefunden werden.
+      </div>
+
+
+      <p>Bitte überprüfen Sie:</p>
+      <ul>
+        <li>Die Schreibweise der URL (Bitte Groß- und Kleinschreibung beachten).
+        <li>Ihr Lesezeichen (Bookmark).
+        <li>Die Seite, von der Sie gekommen sind.
+      </ul>
+
+      <a class="btn btn-large btn-primary pull-right" th:href="@{/home}">Zur Startseite wechseln</a>
+
+    </div>
+  </div>
+
+</div>
+
+<div th:replace="fragments/footer :: footer">Footer</div>
+
+</body>
+</html>
