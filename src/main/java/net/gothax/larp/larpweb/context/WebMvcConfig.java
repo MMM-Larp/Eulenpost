@@ -85,10 +85,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
         return v;
     }
 
-    @Override
+    /*@Override
     public void addViewControllers(ViewControllerRegistry r) {
         r.addViewController("/").setViewName("index");
-    }
+    }*/
 
     @Bean
     public SpringResourceTemplateResolver templateResolver() {
@@ -120,6 +120,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void configureViewResolvers(ViewResolverRegistry registry) {
         registry.viewResolver(thymeleafViewResolver());
     }
+
     @Bean(name = "messageSource")
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();

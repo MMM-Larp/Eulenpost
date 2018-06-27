@@ -15,12 +15,14 @@ public class FormValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
+        errors.rejectValue("firstName", "required", "Bitte geben Sie den Vornamen an.");
+        errors.rejectValue("lastName", "required", "Bitte geben Sie den Nachnamen an.");
         rejectIfNoEmail(errors);
     }
 
     private void rejectIfNoEmail(Errors errors) {
         String value = (String) errors.getFieldValue("email");
-        if(value != null) {
+        if (value != null) {
             if (!isEmail(value) && !value.isEmpty())
                 errors.rejectValue("email", "required", "Ungültige E-Mail Adresse!");
         }
