@@ -1,6 +1,7 @@
 package net.gothax.larp.larpweb.web.validator;
 
 import net.gothax.larp.larpweb.model.Entry;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -8,6 +9,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Component
 public class FormValidator implements Validator {
     @Override
     public boolean supports(Class<?> aClass) {
@@ -26,13 +28,14 @@ public class FormValidator implements Validator {
     }
 
     private boolean isEmail(String email) {
-        String regex = "^[^@\\s]+@([-a-z0-9]+\\.)+[a-z]{2,}$";
-        return isStringRegex(email, regex);
+        //String regex = "^[^@\\s]+@([-a-z0-9]+\\.)+[a-z]{2,}$";
+        //return isStringRegex(email, regex);
+        return email.matches("^[^@\\s]+@([-a-z0-9]+\\.)+[a-z]{2,}$");
     }
 
-    private boolean isStringRegex(String string, String regex) {
+    /*private boolean isStringRegex(String string, String regex) {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(string);
         return matcher.matches();
-    }
+    }*/
 }
