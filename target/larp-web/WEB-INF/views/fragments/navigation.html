@@ -4,50 +4,21 @@
   <meta charset="UTF-8">
 </head>
 <body>
-<div th:fragment="navigation(activeTab)" class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <a class="navbar-brand" th:href="@{/content}" target="_blank">
-        <img th:src="@{/resource/images/logo-tuev-hessen.jpg}"/>
-      </a>
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-    </div>
+<div th:fragment="navigation(activeTab)" class="navbar navbar-expand-lg navbar-light bg-light" role="navigation">
+  <a class="navbar-brand" href="#">Larp MMM</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
-    <div class="collapse navbar-collapse">
-      <ul class="nav navbar-nav">
-        <li th:class="${activeTab == 'booking-manager'}? 'active'">
-          <a th:href="@{/management/booking-manager}">Anmeldung</a>
-        </li>
-        <li th:class="${activeTab == 'sessions'}? 'active'">
-          <a th:href="@{/management/sessions}">Termine</a>
-        </li>
-        <li th:class="${activeTab == 'testing'}? 'active'">
-          <a th:href="@{/management/testing}">Testing</a>
-        </li>
-      </ul>
-
-      <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
-        <li id="fat-menu" class="dropdown">
-          <a href="#" id="drop3" role="button" class="dropdown-toggle"
-             data-toggle="dropdown"> Angemeldet als
-            <b sec:authentication="name"></b>
-            <b class="caret"></b>
-          </a>
-          <ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
-            <li role="presentation">
-              <a role="menuitem" tabindex="-1" th:href="@{/logout}">
-              Abmelden
-              </a>
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </div>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item" sec:authorize="hasAnyRole('ROLE_ADMIN')">
+        <a class="nav-link" th:href="@{/admin}">Übersicht</a>
+      </li>
+    </ul>
   </div>
 </div>
 

@@ -13,10 +13,13 @@ public class Entry {
     private String email;
 
     @Column
-    private String lastname;
+    private String lastName;
 
     @Column
-    private String firstname;
+    private String firstName;
+
+    @Column
+    private String note;
 
     public Long getId() {
         return id;
@@ -34,20 +37,27 @@ public class Entry {
         this.email = email;
     }
 
-    public String getname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setname(String name) {
-        this.lastname = name;
+    public void setLastName(String name) {
+        this.lastName = name;
     }
 
-
-    public String getFirstname() {
-        return firstname;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }
