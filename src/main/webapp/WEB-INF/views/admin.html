@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:insert="fragments/initPage"/>
+</head>
+
+<body>
+
+<div th:replace="fragments/navigation :: navigation('error')">Navigation</div>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-12">
+               <h1> ADMIN BEREICH !! </h1>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="fragments/footer :: footer">Footer</div>
+
+</body>
+</html>
