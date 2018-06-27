@@ -7,33 +7,36 @@
 
 <body>
 
-<div th:replace="fragments/navigation :: navigation('error')">Navigation</div>
+<div th:replace="fragments/navigation :: navigation('index')">Navigation</div>
 
 <div class="container">
 
-    <div class="row">
-        <div class="col-md-12">
-
-            <div class="page-header">
-                <h1>Es tut uns Leid <small>Leider kann Ihre Anfrage nicht bearbeitet werden.</small></h1>
-            </div>
-
-            <div class="alert alert-error">
-                Bitte prüfen Sie Ihre Eingaben oder versuchen Sie es zu einem
-                späteren Zeitpunkt noch einmal.
-            </div>
-
-            <div class="well">
-                <ul>
-                    <li>Zeitstempel: <span th:text="${#dates.format(#dates.createNow(), 'dd.MM.yyyy HH:mm:ss')}" th:remove="tag">date</span></li>
-                    <li>Meldung: <span th:text="${error}" th:remove="tag">error</span></li>
-                </ul>
-            </div>
-
-            <a class="btn btn-large btn-primary pull-right" th:href="@{/}">Zur Startseite wechseln</a>
-        </div>
-    </div>
-
+  <div class="jumbotron">
+    <h1 class="display-4">LARP Community MMM</h1>
+    <p class="lead">Bitte hier eintragen... und noch viele weitere... etc...</p>
+    <hr class="my-4">
+    <form th:action="@{/register}">
+      <div class="form-group col-6">
+        <label for="inputEmail">Email</label>
+        <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+      </div>
+      <div class="form-group col-6">
+        <label for="firstName">Vorname</label>
+        <input type="text" class="form-control" id="firstName" placeholder="Vorname">
+      </div>
+      <div class="form-group col-6">
+        <label for="lastName">Nachname</label>
+        <input type="text" class="form-control" id="lastName" placeholder="Nachname">
+      </div>
+      <div class="form-group col-6">
+        <label for="note">Notiz</label>
+        <textarea class="form-control" rows="4" id="note"></textarea>
+      </div>
+      <div class="form-group col-6">
+        <button class="btn btn-primary" type="submit">Registrieren</button>
+      </div>
+    </form>
+  </div>
 </div>
 
 <div th:replace="fragments/footer :: footer">Footer</div>
