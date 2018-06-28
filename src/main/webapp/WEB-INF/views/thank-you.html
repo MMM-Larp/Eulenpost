@@ -1,10 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <title>M.M.M. e.V.</title>
+    <th:block th:insert="fragments/initPage"/>
 </head>
+
 <body>
- Danke für die Registrierung
+
+<div th:replace="fragments/navigation :: navigation('index')">Navigation</div>
+
+<div class="container">
+    <h1>Vielen Dank für die Einschreibung!</h1>
+</div>
+
+<div th:replace="fragments/footer :: footer">Footer</div>
+
 </body>
 </html>
+</div>

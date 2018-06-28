@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:insert="fragments/initPage"/>
+</head>
+
+<body>
+
+<div th:replace="fragments/navigation :: navigation('error')">Navigation</div>
+
+<div class="container">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    Sender
+                </th>
+                <th>
+                    Empfänger 1
+                </th>
+                <th>
+                    Empfänger 2
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="mapping : ${mappings}" th:name="${mapping.sender.id}">
+                <td>
+                    [[${mapping.sender.firstName}]] [[${mapping.sender.lastName}]] ([[${mapping.sender.house}]]) <br>
+                    [[${mapping.sender.email}]]
+                </td>
+                <td>
+                    [[${mapping.receiverOne.firstName}]] [[${mapping.receiverOne.lastName}]] ([[${mapping.receiverOne.house}]]) <br>
+                    [[${mapping.receiverOne.email}]]
+                </td>
+                <td>
+                    [[${mapping.receiverTwo.firstName}]] [[${mapping.receiverTwo.lastName}]] ([[${mapping.receiverTwo.house}]]) <br>
+                    [[${mapping.receiverTwo.email}]]
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:replace="fragments/footer :: footer">Footer</div>
+
+</body>
+</html>

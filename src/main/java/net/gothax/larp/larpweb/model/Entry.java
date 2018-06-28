@@ -1,15 +1,16 @@
 package net.gothax.larp.larpweb.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class Entry {
+public class Entry implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(unique = true, nullable = false)
-    private Long id;
+    private long id;
 
-    @Column
+    @Column(unique = true)
     private String email;
 
     @Column
@@ -21,11 +22,14 @@ public class Entry {
     @Column
     private String note;
 
-    public Long getId() {
+    @Enumerated(EnumType.STRING)
+    private House house;
+
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -59,5 +63,13 @@ public class Entry {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public House getHouse() {
+        return house;
+    }
+
+    public void setHouse(House house) {
+        this.house = house;
     }
 }

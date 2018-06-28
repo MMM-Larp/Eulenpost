@@ -15,6 +15,7 @@
     <h1 class="display-4">LARP Community MMM</h1>
     <p class="lead">Bitte hier eintragen... und noch viele weitere... etc...</p>
     <hr class="my-4">
+    <!--/*@thymesVar id="entry" type="net.gothax.larp.larpweb.model.Entry"*/-->
     <form th:object="${entry}" th:action="@{/register}" method="post">
       <div class="form-group col-6" th:classappend="${#fields.hasErrors('email')}? 'has-error'">
         <label for="inputEmail">Email</label>
@@ -28,14 +29,22 @@
         <label for="lastName">Nachname (IT)</label>
         <input type="text" class="form-control" id="lastName" th:field="*{lastName}" placeholder="Nachname">
       </div>
-      <div class="form-group col-6">
-        <label for="note">Notiz</label>
-        <textarea class="form-control" rows="4" id="note" th:field="*{note}"></textarea>
-        <label for="note">Notiz <span color="#f00">*</span></label>
-        <textarea class="form-control" rows="4" id="note"></textarea>
+      <div class="form-group col-6" th:classappend="${#fields.hasErrors('house')}? 'has-error'">
+          <label for="house">House</label>
+          <select class="form-control" id="house" th:field="*{house}">
+            <option value="">- bitte wählen -</option>
+              <option value="GRYFFINDOR">Gryffindor</option>
+              <option value="HUFFLEPUFF">Hufflepuff</option>
+              <option value="RAVENCLAW">Ravenclaw</option>
+              <option value="SLYTHERIN">Slytherin</option>
+          </select>
       </div>
       <div class="form-group col-6">
-        Felder mit <span color="#f00">*</span> sind optional
+        <label for="note">Notiz <span style="color: #f00;">*</span></label>
+        <textarea class="form-control" rows="4" id="note" th:field="*{note}"></textarea>
+      </div>
+      <div class="form-group col-6">
+        Felder mit <span style="color: #f00;">*</span> sind optional
       </div>
       <div class="form-group col-6">
         <button class="btn btn-primary" type="submit">Registrieren</button>

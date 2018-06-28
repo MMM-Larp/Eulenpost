@@ -5,9 +5,9 @@
 </head>
 <body>
 <footer th:fragment="footer">
-  <div class="container footer-panel">
+  <div class="container footer">
 
-    <div class="row">
+    <div class="col">
       <div class="col-md-12">
         <p>(c) M.M.M e.V. |
           <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}" th:remove="tag">date</span>

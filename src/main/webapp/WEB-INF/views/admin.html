@@ -10,13 +10,79 @@
 <div th:replace="fragments/navigation :: navigation('error')">Navigation</div>
 
 <div class="container">
+    <div class="row" style="margin-top: 15px; margin-bottom: 15px;">
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
+            Liste leeren
+        </button>
+        <a class="btn btn-info" th:href="@{/admin/roll}">Partner ausrollen</a>
 
-    <div class="row">
-        <div class="col-md-12">
-               <h1> ADMIN BEREICH !! </h1>
+        <a class="btn btn-success" th:href="@{/admin/testdata}">Mit Testdaten fuellen</a>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Liste leeren!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ACHTUNG! DIESE AKTION LEERT DIE LISTE UNWIEDERRUFLICH!
+                    Soll sie wirklich geleert werden? Dies kann nicht rueckgaengig gemacht werden.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
+                    <a th:href="@{/admin/clear}" class="btn btn-primary">
+                        Leeren
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    Vorname (IT)
+                </th>
+                <th>
+                    Nachname (IT)
+                </th>
+                <th>
+                    Haus
+                </th>
+                <th>
+                    E-Mail
+                </th>
+                <th>
+                    Notiz
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="entry : ${entries}" th:name="${entry.id}">
+                <td>
+                    [[${entry.firstName}]]
+                </td>
+                <td>
+                    [[${entry.lastName}]]
+                </td>
+                <td>
+                    [[${entry.house}]]
+                </td>
+                <td>
+                    [[${entry.email}]]
+                </td>
+                <td>
+                    [[${entry.note}]]
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 <div th:replace="fragments/footer :: footer">Footer</div>

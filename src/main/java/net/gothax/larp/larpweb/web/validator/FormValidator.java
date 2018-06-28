@@ -3,6 +3,7 @@ package net.gothax.larp.larpweb.web.validator;
 import net.gothax.larp.larpweb.model.Entry;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 
@@ -15,8 +16,8 @@ public class FormValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        errors.rejectValue("firstName", "required", "Bitte geben Sie den Vornamen an.");
-        errors.rejectValue("lastName", "required", "Bitte geben Sie den Nachnamen an.");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"firstName", "required", "Bitte geben Sie den Vornamen an.");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"lastName", "required", "Bitte geben Sie den Nachnamen an.");
         rejectIfNoEmail(errors);
     }
 
