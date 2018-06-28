@@ -16,8 +16,10 @@ public class FormValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"firstName", "required", "Bitte geben Sie den Vornamen an.");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"lastName", "required", "Bitte geben Sie den Nachnamen an.");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"firstName", "required", "Bitte gib deinen Vornamen (IT) an.");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"lastName", "required", "Bitte gib deinen Nachnamen (IT) an.");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"house", "required", "Bitte gib dein Haus (IT) an.");
+
         rejectIfNoEmail(errors);
     }
 
@@ -25,7 +27,7 @@ public class FormValidator implements Validator {
         String value = (String) errors.getFieldValue("email");
         if (value != null) {
             if (!isEmail(value) && !value.isEmpty())
-                errors.rejectValue("email", "required", "Ungültige E-Mail Adresse!");
+                errors.rejectValue("email", "required", "Bitte gib deine E-Mail Adresse ein!");
         }
     }
 

@@ -1,14 +1,14 @@
 package net.gothax.larp.larpweb.web.controllers;
 
+import net.gothax.larp.larpweb.model.Content;
 import net.gothax.larp.larpweb.model.Entry;
 import net.gothax.larp.larpweb.model.House;
 import net.gothax.larp.larpweb.model.Mapping;
-import net.gothax.larp.larpweb.persistence.EntryRepository;
-import net.gothax.larp.larpweb.persistence.MappingRepository;
+import net.gothax.larp.larpweb.service.ContentService;
+import net.gothax.larp.larpweb.service.EntryService;
+import net.gothax.larp.larpweb.service.MappingService;
 import net.gothax.larp.larpweb.web.validator.FormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,22 +16,24 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import java.util.*;
 
 @Controller
 public class ViewController {
     private final FormValidator formValidator;
 
-    @Resource
-    private EntryRepository entryRepository;
+    private final EntryService entryService;
 
-    @Resource
-    private MappingRepository mappingRepository;
+    private final MappingService mappingService;
+
+    private final ContentService contentService;
 
     @Autowired
-    public ViewController(FormValidator formValidator) {
+    public ViewController(FormValidator formValidator, EntryService entryService, MappingService mappingService, ContentService contentService) {
         this.formValidator = formValidator;
+        this.entryService = entryService;
+        this.mappingService = mappingService;
+        this.contentService = contentService;
     }
 
     @InitBinder("entry")
@@ -42,10 +44,8 @@ public class ViewController {
     @RequestMapping("/")
     public String onIndex(Model model) {
         model.addAttribute("entry", new Entry());
+        model.addAttribute("content", contentService.getContent());
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        //if(!(auth instanceof AnonymousAuthenticationToken))
-        //    return "redirect:/admin";
         return "index";
     }
 
@@ -62,46 +62,40 @@ public class ViewController {
     @RequestMapping("/admin")
     public String onAdmin(Model model) {
 
-        List<Entry> entries = entryRepository.findAll();
+        List<Entry> entries = entryService.getAllEntries();
         model.addAttribute("entries", entries);
 
         return "admin";
     }
 
     @PostMapping(value = "/register")
-    public String onFormSubmit(@Validated @ModelAttribute("entry") Entry entry, BindingResult result) {
+    public String onFormSubmit(Model model, @Validated @ModelAttribute("entry") Entry entry, BindingResult result) {
         if(result.hasErrors())
-            return "error";
+            return "index";
 
-        entryRepository.save(entry);
-
+        entryService.saveEntry(entry);
         return "thank-you";
     }
 
     @RequestMapping(value = "/admin/clear")
     public String onClear() {
-        entryRepository.deleteAll();
+        entryService.clearEntries();
 
         return "admin";
     }
 
     @RequestMapping(value = "/admin/roll")
     public String onRoll() {
-        mappingRepository.deleteAll();
+        mappingService.clearMappings();
 
-        boolean correct = false;
-        while(!correct) {
-            List<Entry> senders = entryRepository.findAll();
+        while(true) {
+            List<Entry> senders = entryService.getAllEntries();
+            List<Entry> receiverOne = entryService.getShuffledEntries();
+            List<Entry> receiverTwo = entryService.getShuffledEntries();
 
-            List<Entry> receiverOne = new ArrayList<>(senders);
-            Collections.shuffle(receiverOne);
-
-            List<Entry> receiverTwo = new ArrayList<>(senders);
-            Collections.shuffle(receiverTwo);
-
-            if(shuffleCorrect(senders, receiverOne, receiverTwo)) {
-                correct = true;
-                saveMapping(senders, receiverOne, receiverTwo);
+            if(mappingService.isShuffleCorrect(senders, receiverOne, receiverTwo)) {
+                mappingService.saveMapping(senders, receiverOne, receiverTwo);
+                break;
             }
         }
 
@@ -110,35 +104,25 @@ public class ViewController {
 
     @RequestMapping(value = "/admin/mapping")
     public String onMapping(Model model) {
-        List<Mapping> mappings = mappingRepository.findAll();
-
+        List<Mapping> mappings = mappingService.getAllMappings();
         model.addAttribute("mappings", mappings);
 
         return "mapping";
     }
 
-    private void saveMapping(List<Entry> senders, List<Entry> receiverOne, List<Entry> receiverTwo) {
-        for(int i = 0; i < senders.size(); i++) {
-            Mapping m = new Mapping();
-            m.setSender(senders.get(i));
-            m.setReceiverOne(receiverOne.get(i));
-            m.setReceiverTwo(receiverTwo.get(i));
 
-            mappingRepository.save(m);
-        }
+    @PostMapping(value = "/admin/saveDescription")
+    public String onSaveDescription(@ModelAttribute Content content) {
+        contentService.saveContent(content);
+        return "redirect:/";
     }
 
 
-    private boolean shuffleCorrect(List<Entry> senders, List<Entry> receiverOne, List<Entry> receiverTwo) {
-        for(int i = 0; i < senders.size(); i++) {
-            if(senders.get(i) == receiverOne.get(i) ||
-               senders.get(i) == receiverTwo.get(i) ||
-               receiverOne.get(i) == receiverTwo.get(i))
-                return false;
-        }
-        return true;
-    }
-
+    /**
+     * This is getting deleted after testing
+     * TODO: DON'T FORGET TO DELETE THIS!
+     * @return
+     */
     @RequestMapping(value = "/admin/testdata")
     public String onTestData() {
         List<String> firstNames = Arrays.asList("Hannah", "Eddie", "Remus", "Lily", "James", "Amycus", "Devon", "Sirius", "Reginald", "Eve");
@@ -152,7 +136,7 @@ public class ViewController {
             House house = House.values()[r.nextInt(House.values().length)];
             String note = UUID.randomUUID().toString();
 
-            String email = "test@gothax.net";
+            String email = "mkling@gothax.net";
 
             Entry e = new Entry();
             e.setFirstName(firstName);
@@ -161,7 +145,7 @@ public class ViewController {
             e.setNote(note);
             e.setEmail(email);
 
-            entryRepository.save(e);
+            entryService.saveEntry(e);
         }
 
         return "redirect:/admin";
