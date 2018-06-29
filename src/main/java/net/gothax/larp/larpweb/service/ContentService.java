@@ -21,8 +21,6 @@ public class ContentService {
     }
 
     public void saveContent(Content content) {
-        Content c = contentRepository.findById(1L).get();
-        c.setDescription(content.getDescription());
-        contentRepository.save(c);
+        contentRepository.save(content);
     }
 }

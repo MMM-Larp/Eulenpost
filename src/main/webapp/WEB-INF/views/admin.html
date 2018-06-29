@@ -10,12 +10,12 @@
 <div th:replace="fragments/navigation :: navigation('error')">Navigation</div>
 
 <div class="container">
-    <div class="row" style="margin-top: 15px; margin-bottom: 15px;">
+    <div style="margin-top: 15px; margin-bottom: 15px;">
         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
             Liste leeren
         </button>
-        <a class="btn btn-info" th:href="@{/admin/roll}">Partner ausrollen</a>
-
+        <a class="btn btn-danger" th:href="@{/admin/close}" th:if="${content.allowSignUp}">Anmeldung schließen</a>
+        <a class="btn btn-success" th:href="@{/admin/open}" th:if="${not content.allowSignUp}">Anmeldung öffnen</a>
         <a class="btn btn-success" th:href="@{/admin/testdata}">Mit Testdaten fuellen</a>
     </div>
 
@@ -50,6 +50,9 @@
                     Vorname (IT)
                 </th>
                 <th>
+                    Spitzname (IT)
+                </th>
+                <th>
                     Nachname (IT)
                 </th>
                 <th>
@@ -67,6 +70,9 @@
             <tr th:each="entry : ${entries}" th:name="${entry.id}">
                 <td>
                     [[${entry.firstName}]]
+                </td>
+                <td>
+                    [[${entry.nickName}]]
                 </td>
                 <td>
                     [[${entry.lastName}]]

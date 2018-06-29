@@ -1,6 +1,7 @@
 package net.gothax.larp.larpweb.model;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class Content {
@@ -11,6 +12,12 @@ public class Content {
 
     @Column
     private String description;
+
+    @Column
+    private boolean allowSignUp;
+
+    @Column
+    private Date closeDate;
 
     public String getDescription() {
         return description;
@@ -26,5 +33,21 @@ public class Content {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public boolean isAllowSignUp() {
+        return allowSignUp;
+    }
+
+    public void setAllowSignUp(boolean allowSignUp) {
+        this.allowSignUp = allowSignUp;
+    }
+
+    public Date getCloseDate() {
+        return closeDate;
+    }
+
+    public void setCloseDate(Date closeDate) {
+        this.closeDate = closeDate;
     }
 }

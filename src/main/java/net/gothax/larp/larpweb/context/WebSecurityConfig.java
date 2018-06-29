@@ -9,8 +9,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -25,8 +27,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))
                 .and()
             .authorizeRequests()
-                .antMatchers("/", LOGIN, "/login/auth", ACCESS_DENIED, "/resource/**", "/register", "/admin").permitAll()
-                .antMatchers("/**").hasAnyRole("ADMIN")
+                .antMatchers("/", LOGIN, "/login/auth", ACCESS_DENIED, "/resource/**", "/register", "/privacy").permitAll()
+                .antMatchers("/**", "/admin/**", "/mapping/**").hasAnyRole("ADMIN")
                 .and()
             .formLogin()
                 .loginPage(LOGIN)
@@ -52,6 +54,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.inMemoryAuthentication()
                 .withUser("manni")
                 .password(passwordEncoder().encode("manfred"))
+                .roles(ROLE_ADMIN);
+        auth.inMemoryAuthentication()
+                .withUser("gryffindor")
+                .password(passwordEncoder().encode("gewinnt"))
                 .roles(ROLE_ADMIN);
     }
 

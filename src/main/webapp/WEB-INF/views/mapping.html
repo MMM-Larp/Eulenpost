@@ -10,6 +10,72 @@
 <div th:replace="fragments/navigation :: navigation('error')">Navigation</div>
 
 <div class="container">
+    <div style="margin-top: 15px; margin-bottom: 15px;">
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
+            Mapping löschen
+        </button>
+        <a class="btn btn-info" th:href="@{/admin/roll}" th:if="${not content.allowSignUp}">Partner ausrollen</a>
+        <a class="btn btn-info disabled" th:if="${content.allowSignUp}">Partner ausrollen</a>
+
+        <button type="button" class="btn btn-success disabled" th:if="${content.allowSignUp}">
+            E-Mail aussenden
+        </button>
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#emailModal" th:if="${not content.allowSignUp}">
+            E-Mail aussenden
+        </button>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Mappings löschen!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ACHTUNG! DIESE AKTION LEERT DIE MAPPINGS UNWIEDERRUFLICH!
+                    Soll sie wirklich geleert werden? Dies kann nicht rueckgaengig gemacht werden.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
+                    <a th:href="@{/admin/clearMapping}" class="btn btn-primary">
+                        Ja, Mappings löschen
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="emailModalLabel">E-Mails aussenden!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ACHTUNG! DIESE AKTION VERSENDET JEDEM TEILNEHMER DIE ZWEI EMPFÄNGER!
+                    WILLST DU FORTFAHREN?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
+                    <a th:href="@{/admin/send}" class="btn btn-primary">
+                        Ja, E-Mails senden
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
     <table class="table table-striped">
         <thead>
             <tr>

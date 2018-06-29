@@ -5,7 +5,7 @@
 </head>
 <body>
 <div th:fragment="navigation(activeTab)" class="navbar navbar-expand-lg navbar-light bg-light" role="navigation">
-  <a class="navbar-brand" href="#">Larp MMM</a>
+  <a class="nav-link" href="/"><img th:src="@{/resource/images/mmm_logo_bl.png}" style="max-height: 50px;"/></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -16,7 +16,10 @@
         <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item" sec:authorize="hasAnyRole('ROLE_ADMIN')">
-        <a class="nav-link" th:href="@{/admin}">Liste</a>
+        <a class="nav-link" th:href="@{/admin}">Anmeldeliste</a>
+      </li>
+      <li class="nav-item" sec:authorize="hasAnyRole('ROLE_ADMIN')">
+          <a class="nav-link" th:href="@{/mapping}">Briefpartnerliste</a>
       </li>
     </ul>
   </div>

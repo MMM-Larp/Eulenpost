@@ -308,12 +308,6 @@
         </dependency>
 
 		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-			<version>1.4.7</version>
-		</dependency>
-
-		<dependency>
 			<groupId>javax.activation</groupId>
 			<artifactId>activation</artifactId>
 			<version>1.1-rev-1</version>
@@ -378,6 +372,12 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <version>2.22.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4</version>
         </dependency>
     </dependencies>
 
@@ -462,35 +462,6 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.0.0</version>
             </plugin>
-
-			<plugin>
-				<groupId>com.voltvoodoo</groupId>
-				<artifactId>brew</artifactId>
-				<version>0.2.1</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>optimize</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<optimizeSourceDir>${basedir}/src/main/webapp/resource/js</optimizeSourceDir>
-					<optimizeOutputDir>${basedir}/src/main/webapp/resource/js</optimizeOutputDir>
-					<optimizeBuildDir>${basedir}/target/javaScript</optimizeBuildDir>
-					<modules>
-						<module>
-							<name>bookingWidgetApp</name>
-						</module>
-						<module>
-							<name>sessionsApp</name>
-						</module>
-						<module>
-							<name>bookingsApp</name>
-						</module>
-					</modules>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 

@@ -3,7 +3,7 @@
 
 <head>
     <th:block th:insert="fragments/initPage"/>
-    <script data-th-src="@{/resource/js/views/index.js}" type="text/javascript" ></script>
+    <script sec:authorize="hasAnyRole('ROLE_ADMIN')" data-th-src="@{/resource/js/views/index.js}" type="text/javascript" ></script>
 </head>
 
 <body>
@@ -13,10 +13,11 @@
 <div class="container">
 
   <div class="jumbotron">
-    <h1 class="display-4">M.M.M. | Eulenpost-o-mat</h1>
+    <h1 class="display-4">M.M.M. e.V. | Eulenpost-o-mat</h1>
 
     <div>
-        <p class="lead" id="description-box">[[${content.description}]]
+        <p class="lead" id="description-box" th:text="${content.description}">
+
             <a href="#" sec:authorize="hasAnyRole('ROLE_ADMIN')" id="cmd-edit-notes" class="btn default btn-xs">
                 <span class="fa fa-pencil" aria-hidden="true"></span>
             </a>
@@ -25,7 +26,9 @@
         <div class="col" sec:authorize="hasAnyRole('ROLE_ADMIN')" id="note-box-edit">
           <form th:object="${content}" th:action="@{/admin/saveDescription}" method="post">
             <div class="form-group">
-              <textarea id="notes" name="notes" class="form-control" rows="7" th:field="*{description}">[[${content.description}]]</textarea>
+              <textarea id="notes" name="notes" class="form-control" rows="7" th:field="*{description}">
+                  [[${content.description}]]
+              </textarea>
             </div>
             <div class="form-group">
               <button type="submit" class="btn btn-info">Beschreibung speichern</button>
@@ -34,27 +37,28 @@
         </div>
     </div>
 
-
-
-
-    <hr class="my-4">
-    <!--/*@thymesVar id="entry" type="net.gothax.larp.larpweb.model.Entry"*/-->
-    <form th:object="${entry}" th:action="@{/register}" method="post">
-      <div class="form-group col-6" th:classappend="${#fields.hasErrors('email')}? 'has-error'">
-        <label for="inputEmail">Email</label>
-        <input type="email" class="form-control" id="inputEmail" th:field="*{email}" placeholder="Email">
+    <div th:if="${content.allowSignUp}">
+        <hr class="my-4">
+        <form th:object="${entry}" th:action="@{/register}" method="post">
+      <div class="form-group col-6">
+        <label for="inputEmail">Email-Adresse</label>
+        <input type="text" class="form-control" id="inputEmail" th:field="*{email}" placeholder="Email" required>
       </div>
-      <div class="form-group col-6" th:classappend="${#fields.hasErrors('firstName')}? 'has-error'">
+      <div class="form-group col-6">
         <label for="firstName">Vorname (IT)</label>
-        <input type="text" class="form-control" id="firstName" th:field="*{firstName}" placeholder="Vorname">
-      </div>
-      <div class="form-group col-6" th:classappend="${#fields.hasErrors('lastName')}? 'has-error'">
+        <input type="text" class="form-control" id="firstName" th:field="*{firstName}" placeholder="Vorname" required>
+    </div>
+        <div class="form-group col-6">
+            <label for="firstName">Ruf- oder Spitzname (IT)</label>
+            <input type="text" class="form-control" id="nickName" th:field="*{nickName}" placeholder="Ruf- oder Spitzname" required>
+        </div>
+      <div class="form-group col-6">
         <label for="lastName">Nachname (IT)</label>
-        <input type="text" class="form-control" id="lastName" th:field="*{lastName}" placeholder="Nachname">
+        <input type="text" class="form-control" id="lastName" th:field="*{lastName}" placeholder="Nachname" required>
       </div>
-      <div class="form-group col-6" th:classappend="${#fields.hasErrors('house')}? 'has-error'">
-          <label for="house">House</label>
-          <select class="form-control" id="house" th:field="*{house}">
+      <div class="form-group col-6">
+          <label for="house">Hogwarts-Haus</label>
+          <select class="form-control" id="house" th:field="*{house}" required>
             <option value="">- bitte wählen -</option>
               <option value="GRYFFINDOR">Gryffindor</option>
               <option value="HUFFLEPUFF">Hufflepuff</option>
@@ -62,17 +66,48 @@
               <option value="SLYTHERIN">Slytherin</option>
           </select>
       </div>
-      <div class="form-group col-6">
-        <label for="note">Notiz <span style="color: #f00;">*</span></label>
-        <textarea class="form-control" rows="4" id="note" th:field="*{note}"></textarea>
+      <div class="form-group col-12">
+        <label for="note">
+            Notiz <span style="color: #f00;">(optional)</span> <br>
+            Hinweis: Dieses Feld ist dafür da, dass du deinen anonymen Sendern bestimmte Nachrichten zukommen lassen kannst. <br>
+            Bspw. "Bitte keine Briefe von engen Verwandten!", "Keine Schokolade, ich bin laktoseintolerant!" etc.
+        </label>
+        <div class="col-6">
+            <textarea class="form-control" rows="4" id="note" th:field="*{note}"></textarea>
+        </div>
       </div>
-      <div class="form-group col-6">
-        Felder mit <span style="color: #f00;">*</span> sind optional
-      </div>
+        <div class="form-group col-12">
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="privacy" th:field="*{privacy}" required>
+                <label class="form-check-label" for="privacy">
+                    Hiermit stimme ich der <a th:href="@{/privacy}">
+                    Datenschutzerklärung</a> zu und bin mir bewusst, dass ich
+                    über die obige E-Mail kontaktiert werde. <br> <br>
+                </label>
+            </div>
+        </div>
+        <div class="form-group col-12">
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="rules" th:field="*{rules}" required>
+                <label class="form-check-label" for="rules">
+                    Weiterhin bin ich mir bewusst, dass ich mich durch das Abschicken dieses Formulars dazu verpflichte <br>
+                    den mir zugewiesenen Personen einen Brief für die nächste Con zu schreiben. Ich weiß auch, dass diese <br>
+                    Briefe entweder aus der Sicht meines IT-Charakters, oder aber auch kreativ gestaltet werden können, bspw. <br>
+                    Eine Bestellung vom "Honigtopf", "Zonko's". Zusätzlich vermeide ich es aus der Sicht <br>
+                    eines, von anderen Spielern, dargestellten Charakter (egal ob SC oder NSC) zu schreiben.
+                </label>
+            </div>
+        </div>
+
       <div class="form-group col-6">
         <button class="btn btn-primary" type="submit">Registrieren</button>
       </div>
     </form>
+    </div>
+    <div th:if="${not content.allowSignUp}">
+        Zur Zeit läuft leider keine Anmeldung. Schau am besten ein bisschen später nochmal vorbei!
+    </div>
+
   </div>
 </div>
 

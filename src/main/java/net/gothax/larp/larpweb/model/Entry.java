@@ -1,5 +1,7 @@
 package net.gothax.larp.larpweb.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -17,6 +19,9 @@ public class Entry implements Serializable {
     private String lastName;
 
     @Column
+    private String nickName;
+
+    @Column
     private String firstName;
 
     @Column
@@ -24,6 +29,12 @@ public class Entry implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private House house;
+
+    @JsonIgnore
+    private boolean privacy;
+
+    @JsonIgnore
+    private boolean rules;
 
     public long getId() {
         return id;
@@ -71,5 +82,29 @@ public class Entry implements Serializable {
 
     public void setHouse(House house) {
         this.house = house;
+    }
+
+    public boolean isPrivacy() {
+        return privacy;
+    }
+
+    public void setPrivacy(boolean privacy) {
+        this.privacy = privacy;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public boolean isRules() {
+        return rules;
+    }
+
+    public void setRules(boolean rules) {
+        this.rules = rules;
     }
 }

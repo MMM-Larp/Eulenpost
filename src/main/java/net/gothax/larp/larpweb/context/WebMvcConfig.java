@@ -85,17 +85,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
         return v;
     }
 
-    /*@Override
-    public void addViewControllers(ViewControllerRegistry r) {
-        r.addViewController("/").setViewName("index");
-    }*/
-
     @Bean
     public SpringResourceTemplateResolver templateResolver() {
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
         templateResolver.setPrefix(VIEWS);
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode("HTML");
+        templateResolver.setCharacterEncoding("UTF-8");
         return templateResolver;
     }
 

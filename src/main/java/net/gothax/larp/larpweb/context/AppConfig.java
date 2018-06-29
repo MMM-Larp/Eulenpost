@@ -1,5 +1,6 @@
 package net.gothax.larp.larpweb.context;
 
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -56,6 +57,12 @@ public class AppConfig {
 
     @Value("${mailSender.host}")
     private String mailHost;
+
+    @Value("${mailSender.user}")
+    private String mailUser;
+
+    @Value("${mailSender.pass}")
+    private String mailPass;
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
@@ -127,6 +134,14 @@ public class AppConfig {
     public JavaMailSender javaMailService() {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
         javaMailSender.setHost(mailHost);
+        javaMailSender.setUsername(mailUser);
+        javaMailSender.setPassword(mailPass);
+        javaMailSender.setPort(25);
+
+        Properties p = new Properties();
+        p.setProperty("mail.smtp.auth", "true");
+        javaMailSender.setJavaMailProperties(p);
+
         return javaMailSender;
     }
 }

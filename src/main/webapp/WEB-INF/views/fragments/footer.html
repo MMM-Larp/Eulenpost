@@ -6,14 +6,14 @@
 <body>
 <footer th:fragment="footer">
   <div class="container footer">
-
+    <hr>
     <div class="col">
       <div class="col-md-12">
         <p>(c) M.M.M e.V. |
           <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}" th:remove="tag">date</span>
           Alle Rechte vorbehalten.
           Powered by <a href="https://www.gothax.net/" target="_blank">Gothax</a> |
-          <a th:href="@{/}" target="_blank">Impressum & Datenschutz</a> |
+          <a th:href="@{/privacy}" target="_blank">Impressum & Datenschutz</a> |
           <a th:href="@{/login}">Login Adminbereich</a>
         </p>
       </div>

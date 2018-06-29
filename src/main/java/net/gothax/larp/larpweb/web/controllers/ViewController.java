@@ -9,17 +9,26 @@ import net.gothax.larp.larpweb.service.EntryService;
 import net.gothax.larp.larpweb.service.MappingService;
 import net.gothax.larp.larpweb.web.validator.FormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import java.util.*;
 
 @Controller
 public class ViewController {
+    private final TemplateEngine templateEngine;
+
+    private final JavaMailSender mailSender;
+
     private final FormValidator formValidator;
 
     private final EntryService entryService;
@@ -29,7 +38,11 @@ public class ViewController {
     private final ContentService contentService;
 
     @Autowired
-    public ViewController(FormValidator formValidator, EntryService entryService, MappingService mappingService, ContentService contentService) {
+    public ViewController(TemplateEngine templateEngine, JavaMailSender mailSender,
+                          FormValidator formValidator, EntryService entryService,
+                          MappingService mappingService, ContentService contentService) {
+        this.templateEngine = templateEngine;
+        this.mailSender = mailSender;
         this.formValidator = formValidator;
         this.entryService = entryService;
         this.mappingService = mappingService;
@@ -44,7 +57,8 @@ public class ViewController {
     @RequestMapping("/")
     public String onIndex(Model model) {
         model.addAttribute("entry", new Entry());
-        model.addAttribute("content", contentService.getContent());
+        Content content = contentService.getContent();
+        model.addAttribute("content", content);
 
         return "index";
     }
@@ -52,6 +66,11 @@ public class ViewController {
     @RequestMapping("/login")
     public String onLogin() {
         return "login";
+    }
+
+    @RequestMapping("/privacy")
+    public String onPrivacy() {
+        return "privacy";
     }
 
     @RequestMapping("/accessDenied")
@@ -64,24 +83,94 @@ public class ViewController {
 
         List<Entry> entries = entryService.getAllEntries();
         model.addAttribute("entries", entries);
+        model.addAttribute("content", contentService.getContent());
 
         return "admin";
     }
 
     @PostMapping(value = "/register")
     public String onFormSubmit(Model model, @Validated @ModelAttribute("entry") Entry entry, BindingResult result) {
-        if(result.hasErrors())
+        if(result.hasErrors()) {
+            model.addAttribute("content", contentService.getContent());
             return "index";
+        }
 
+        MimeMessagePreparator preparator = mimeMessage -> {
+            MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
+            message.setFrom("mailer@gothax.net");
+            message.setTo(entry.getEmail());
+            message.setSubject("M.M.M. LARP - Eulenpost-O-Mat Anmeldung");
+
+            final Context templateData = new Context();
+            templateData.setVariable("entry", entry);
+
+            String htmlContent = templateEngine.process("email/optInEmail", templateData);
+            message.setText(htmlContent, true);
+        };
+
+        mailSender.send(preparator);
         entryService.saveEntry(entry);
+
         return "thank-you";
+    }
+
+    @RequestMapping(value = "/admin/send")
+    public String onSendMail() {
+        List<Mapping> mappings = mappingService.getAllMappings();
+
+        for(Mapping m : mappings) {
+            MimeMessagePreparator preparator = mimeMessage -> {
+                MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
+                message.setFrom("mailer@gothax.net");
+                message.setTo(m.getSender().getEmail());
+                message.setSubject("M.M.M. LARP - Deine Empfänger");
+
+                final Context templateData = new Context();
+                templateData.setVariable("sender", m.getSender());
+                templateData.setVariable("receiverOne", m.getReceiverOne());
+                templateData.setVariable("receiverTwo", m.getReceiverTwo());
+
+                String htmlContent = templateEngine.process("email/rollMail", templateData);
+                message.setText(htmlContent, true);
+            };
+
+            mailSender.send(preparator);
+        }
+
+        return "redirect:/mapping";
     }
 
     @RequestMapping(value = "/admin/clear")
     public String onClear() {
         entryService.clearEntries();
 
-        return "admin";
+        return "redirect:/admin";
+    }
+
+    @RequestMapping(value = "/admin/close")
+    public String onClose() {
+        Content c = contentService.getContent();
+        c.setAllowSignUp(false);
+        contentService.saveContent(c);
+
+        return "redirect:/admin";
+    }
+
+    @RequestMapping(value = "/admin/open")
+    public String onOpen() {
+        Content c = contentService.getContent();
+        c.setAllowSignUp(true);
+        contentService.saveContent(c);
+
+        return "redirect:/admin";
+    }
+
+
+    @RequestMapping(value = "/admin/clearMapping")
+    public String onClearMapping() {
+        mappingService.clearMappings();
+
+        return "redirect:/mapping";
     }
 
     @RequestMapping(value = "/admin/roll")
@@ -93,19 +182,23 @@ public class ViewController {
             List<Entry> receiverOne = entryService.getShuffledEntries();
             List<Entry> receiverTwo = entryService.getShuffledEntries();
 
-            if(mappingService.isShuffleCorrect(senders, receiverOne, receiverTwo)) {
-                mappingService.saveMapping(senders, receiverOne, receiverTwo);
-                break;
+            if(senders.size() >= 3) {
+                if (mappingService.isShuffleCorrect(senders, receiverOne, receiverTwo)) {
+                    mappingService.saveMapping(senders, receiverOne, receiverTwo);
+                    break;
+                }
             }
         }
 
-        return "redirect:/admin/mapping";
+        return "redirect:/mapping";
     }
 
-    @RequestMapping(value = "/admin/mapping")
+
+    @RequestMapping(value = "/mapping")
     public String onMapping(Model model) {
         List<Mapping> mappings = mappingService.getAllMappings();
         model.addAttribute("mappings", mappings);
+        model.addAttribute("content", contentService.getContent());
 
         return "mapping";
     }
@@ -118,11 +211,6 @@ public class ViewController {
     }
 
 
-    /**
-     * This is getting deleted after testing
-     * TODO: DON'T FORGET TO DELETE THIS!
-     * @return
-     */
     @RequestMapping(value = "/admin/testdata")
     public String onTestData() {
         List<String> firstNames = Arrays.asList("Hannah", "Eddie", "Remus", "Lily", "James", "Amycus", "Devon", "Sirius", "Reginald", "Eve");
@@ -131,6 +219,7 @@ public class ViewController {
         Random r = new Random();
         for(int i = 0; i < 6; i++) {
             String firstName = firstNames.get(r.nextInt(firstNames.size()));
+            String nickName = firstNames.get(r.nextInt(firstNames.size()));
             String lastName = lastNames.get(r.nextInt(lastNames.size()));
 
             House house = House.values()[r.nextInt(House.values().length)];
@@ -140,10 +229,13 @@ public class ViewController {
 
             Entry e = new Entry();
             e.setFirstName(firstName);
+            e.setNickName(nickName);
             e.setLastName(lastName);
             e.setHouse(house);
             e.setNote(note);
             e.setEmail(email);
+            e.setPrivacy(true);
+            e.setRules(true);
 
             entryService.saveEntry(e);
         }

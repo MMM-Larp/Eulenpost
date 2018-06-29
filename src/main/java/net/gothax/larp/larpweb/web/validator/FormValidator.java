@@ -6,6 +6,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import java.util.Objects;
+
 
 @Component
 public class FormValidator implements Validator {
@@ -20,7 +22,14 @@ public class FormValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors,"lastName", "required", "Bitte gib deinen Nachnamen (IT) an.");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors,"house", "required", "Bitte gib dein Haus (IT) an.");
 
+        rejectIfNoPrivacy(errors);
         rejectIfNoEmail(errors);
+    }
+
+    private void rejectIfNoPrivacy(Errors errors) {
+        boolean privacy = Boolean.valueOf(Objects.requireNonNull(errors.getFieldValue("privacy")).toString());
+        if(!privacy)
+            errors.rejectValue("privacy", "required", "Datenschutzerklärung muss zugestimmt werden");
     }
 
     private void rejectIfNoEmail(Errors errors) {

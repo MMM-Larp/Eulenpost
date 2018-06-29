@@ -13,9 +13,8 @@ $(document).ready(function() {
     });
 
     $("#description-box").on("click", function() {
+
         $("#note-box-edit").show();
         $("#description-box").hide();
     });
-
-    // TODO: nicht hiden, wenn man kein admin ist
 });

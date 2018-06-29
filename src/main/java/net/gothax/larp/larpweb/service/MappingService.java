@@ -28,9 +28,9 @@ public class MappingService {
      */
     public boolean isShuffleCorrect(List<Entry> senders, List<Entry> receiverOne, List<Entry> receiverTwo) {
         for(int i = 0; i < senders.size(); i++)
-            if(senders.get(i) == receiverOne.get(i) ||
-               senders.get(i) == receiverTwo.get(i) ||
-               receiverOne.get(i) == receiverTwo.get(i))
+            if(senders.get(i).getId() == receiverOne.get(i).getId() ||
+               senders.get(i).getId() == receiverTwo.get(i).getId() ||
+               receiverOne.get(i).getId() == receiverTwo.get(i).getId())
                 return false;
         return true;
     }
