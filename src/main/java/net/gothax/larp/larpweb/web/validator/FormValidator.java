@@ -20,6 +20,7 @@ public class FormValidator implements Validator {
     public void validate(Object o, Errors errors) {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors,"firstName", "required", "Bitte gib deinen Vornamen (IT) an.");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors,"lastName", "required", "Bitte gib deinen Nachnamen (IT) an.");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"otName", "required", "Bitte gib deinen OT-Namen an.");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors,"house", "required", "Bitte gib dein Haus (IT) an.");
 
         rejectIfNoPrivacy(errors);

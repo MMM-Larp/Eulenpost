@@ -16,7 +16,7 @@
         </button>
         <a class="btn btn-danger" th:href="@{/admin/close}" th:if="${content.allowSignUp}">Anmeldung schließen</a>
         <a class="btn btn-success" th:href="@{/admin/open}" th:if="${not content.allowSignUp}">Anmeldung öffnen</a>
-        <a class="btn btn-success" th:href="@{/admin/testdata}">Mit Testdaten fuellen</a>
+        <!-- <a class="btn btn-success" th:href="@{/admin/testdata}">Mit Testdaten fuellen</a> -->
     </div>
 
     <!-- Modal -->
@@ -47,6 +47,8 @@
         <thead>
             <tr>
                 <th>
+                </th>
+                <th>
                     Vorname (IT)
                 </th>
                 <th>
@@ -59,6 +61,9 @@
                     Haus
                 </th>
                 <th>
+                    OT-Name
+                </th>
+                <th>
                     E-Mail
                 </th>
                 <th>
@@ -68,6 +73,11 @@
         </thead>
         <tbody>
             <tr th:each="entry : ${entries}" th:name="${entry.id}">
+                <td>
+                    <a th:href="@{'/admin/edit/' + ${entry.id}}" style="color: #555;">
+                        <span class="fa fa-edit"></span>
+                    </a>
+                </td>
                 <td>
                     [[${entry.firstName}]]
                 </td>
@@ -79,6 +89,9 @@
                 </td>
                 <td>
                     [[${entry.house}]]
+                </td>
+                <td>
+                    [[${entry.otName}]]
                 </td>
                 <td>
                     [[${entry.email}]]

@@ -33,4 +33,12 @@ public class EntryService {
     public void clearEntries() {
         entryRepository.deleteAll();
     }
- }
+
+    public Entry getEntryById(long id) {
+        return entryRepository.findById(id).get();
+    }
+
+    public void delete(Entry e) {
+        entryRepository.delete(e);
+    }
+}

@@ -25,6 +25,9 @@ public class Entry implements Serializable {
     private String firstName;
 
     @Column
+    private String otName;
+
+    @Column
     private String note;
 
     @Enumerated(EnumType.STRING)
@@ -106,5 +109,13 @@ public class Entry implements Serializable {
 
     public void setRules(boolean rules) {
         this.rules = rules;
+    }
+
+    public String getOtName() {
+        return otName;
+    }
+
+    public void setOtName(String otName) {
+        this.otName = otName;
     }
 }

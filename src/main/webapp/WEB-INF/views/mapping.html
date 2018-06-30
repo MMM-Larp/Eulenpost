@@ -12,7 +12,7 @@
 <div class="container">
     <div style="margin-top: 15px; margin-bottom: 15px;">
         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
-            Mapping löschen
+            Liste leeren
         </button>
         <a class="btn btn-info" th:href="@{/admin/roll}" th:if="${not content.allowSignUp}">Partner ausrollen</a>
         <a class="btn btn-info disabled" th:if="${content.allowSignUp}">Partner ausrollen</a>
@@ -83,10 +83,10 @@
                     Sender
                 </th>
                 <th>
-                    Empfänger 1
+                    Tag 1
                 </th>
                 <th>
-                    Empfänger 2
+                    Tag 2
                 </th>
             </tr>
         </thead>
@@ -97,12 +97,12 @@
                     [[${mapping.sender.email}]]
                 </td>
                 <td>
-                    [[${mapping.receiverOne.firstName}]] [[${mapping.receiverOne.lastName}]] ([[${mapping.receiverOne.house}]]) <br>
-                    [[${mapping.receiverOne.email}]]
+                    [[${mapping.receivers[0].firstName}]] [[${mapping.receivers[0].lastName}]] ([[${mapping.receivers[0].house}]]) <br>
+                    [[${mapping.receivers[0].email}]]
                 </td>
                 <td>
-                    [[${mapping.receiverTwo.firstName}]] [[${mapping.receiverTwo.lastName}]] ([[${mapping.receiverTwo.house}]]) <br>
-                    [[${mapping.receiverTwo.email}]]
+                    [[${mapping.receivers[1].firstName}]] [[${mapping.receivers[1].lastName}]] ([[${mapping.receivers[1].house}]]) <br>
+                    [[${mapping.receivers[1].email}]]
                 </td>
             </tr>
         </tbody>

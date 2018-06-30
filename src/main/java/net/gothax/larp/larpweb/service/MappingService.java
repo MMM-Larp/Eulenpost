@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Transactional
@@ -23,26 +23,33 @@ public class MappingService {
         return mappingRepository.findAll();
     }
 
-    /**
-     * This makes sure, that neither first nor second receiver are equal to sender or to themselves.
-     */
-    public boolean isShuffleCorrect(List<Entry> senders, List<Entry> receiverOne, List<Entry> receiverTwo) {
-        for(int i = 0; i < senders.size(); i++)
-            if(senders.get(i).getId() == receiverOne.get(i).getId() ||
-               senders.get(i).getId() == receiverTwo.get(i).getId() ||
-               receiverOne.get(i).getId() == receiverTwo.get(i).getId())
-                return false;
-        return true;
-    }
+    public void saveMapping(List<Entry> senders) {
+        List<Entry> dayOne = new ArrayList<>(senders);
+        List<Entry> dayTwo = new ArrayList<>(senders);
 
-    public void saveMapping(List<Entry> senders, List<Entry> receiverOne, List<Entry> receiverTwo) {
+        while(isShuffleNotCorrect(senders, dayOne, dayTwo)) {
+            Collections.shuffle(dayOne);
+            Collections.shuffle(dayTwo);
+        }
+
         for(int i = 0; i < senders.size(); i++) {
             Mapping m = new Mapping();
             m.setSender(senders.get(i));
-            m.setReceiverOne(receiverOne.get(i));
-            m.setReceiverTwo(receiverTwo.get(i));
-
+            m.setReceivers(Arrays.asList(
+                dayOne.get(i),
+                dayTwo.get(i)
+            ));
             mappingRepository.save(m);
         }
+    }
+
+    private boolean isShuffleNotCorrect(List<Entry> senders, List<Entry> dayOne, List<Entry> dayTwo) {
+        for(int i = 0; i < senders.size(); i++) {
+            if(senders.get(i) == dayOne.get(i) ||
+               senders.get(i) == dayTwo.get(i) ||
+               dayOne.get(i) == dayTwo.get(i))
+                return true;
+        }
+        return false;
     }
 }

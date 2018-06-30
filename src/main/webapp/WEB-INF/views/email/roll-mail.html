@@ -1,0 +1,46 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+
+<h1>Anmeldung für die M.M.M. e.V Eulenpost</h1>
+
+<p>Hallo <span th:text="${sender.otName}"></span>,</p>
+<p>Es ist bald soweit!</p>
+
+<p>Die nächste Con rückt in greifbare Nähe und dazu gehört natürlich auch dieses Mal wieder die Eulenpost. Wir haben
+	deine diesmaligen Empfänger ausgelost und sie weiter unten aufgelistet! Bitte beachte die Anmerkungen, dass die
+	Briefe auch wirklich gut ankommen.
+</p>
+
+<p>
+Dein Empfänger für Tag 1 ist:
+</p>
+
+<p>
+    Vorname (IT): <b><span th:text="${receivers[0].firstName}"></span></b> <br>
+    Spitzname (IT): <b><span th:text="${receivers[0].nickName}"></span></b> <br>
+	Nachname (IT): <b><span th:text="${receivers[0].lastName}"></span></b> <br>
+	Hogwarts-Haus (IT): <b><span th:text="${receivers[0].house}"></span></b> <br>
+	Anmerkungen: <b><span th:text="${receivers[0].note}"></span></b>
+</p>
+
+<p>Dein Empfänger für Tag 2 ist:</p>
+
+<p>
+	Vorname (IT): <b><span th:text="${receivers[1].firstName}"></span></b> <br>
+	Spitzname (IT): <b><span th:text="${receivers[1].nickName}"></span></b> <br>
+	Nachname (IT): <b><span th:text="${receivers[1].lastName}"></span></b> <br>
+	Hogwarts-Haus (IT): <b><span th:text="${receivers[1].house}"></span></b> <br>
+	Anmerkungen: <b><span th:text="${receivers[1].note}"></span></b>
+</p>
+
+<p>
+    Jetzt wünschen wir dir viel Spaß beim Schreiben und wir freuen uns auf dich!
+</p>
+
+<p>
+	Dein M.M.M. e.V.
+</p>
+</body>
+</html>

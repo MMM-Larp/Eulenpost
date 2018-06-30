@@ -18,7 +18,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String LOGIN = "/login";
-    private static final String ACCESS_DENIED = "/accessDenied";
+    private static final String ACCESS_DENIED = "/access-denied";
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

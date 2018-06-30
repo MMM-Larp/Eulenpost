@@ -1,6 +1,9 @@
 package net.gothax.larp.larpweb.model;
 
+import org.springframework.data.repository.cdi.Eager;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Mapping {
@@ -13,10 +16,8 @@ public class Mapping {
     private Entry sender;
 
     @Column
-    private Entry receiverOne;
-
-    @Column
-    private Entry receiverTwo;
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<Entry> receivers;
 
     public Long getId() {
         return id;
@@ -35,19 +36,11 @@ public class Mapping {
         this.sender = sender;
     }
 
-    public Entry getReceiverOne() {
-        return receiverOne;
+    public List<Entry> getReceivers() {
+        return receivers;
     }
 
-    public void setReceiverOne(Entry receiverOne) {
-        this.receiverOne = receiverOne;
-    }
-
-    public Entry getReceiverTwo() {
-        return receiverTwo;
-    }
-
-    public void setReceiverTwo(Entry receiverTwo) {
-        this.receiverTwo = receiverTwo;
+    public void setReceivers(List<Entry> receivers) {
+        this.receivers = receivers;
     }
 }

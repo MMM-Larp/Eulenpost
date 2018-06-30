@@ -5,20 +5,20 @@
 </head>
 <body>
 <div th:fragment="navigation(activeTab)" class="navbar navbar-expand-lg navbar-light bg-light" role="navigation">
-  <a class="nav-link" href="/"><img th:src="@{/resource/images/mmm_logo_bl.png}" style="max-height: 50px;"/></a>
+  <a class="nav-link" th:href="@{/}"><img th:src="@{/resource/images/mmm_logo_bl.png}" style="max-height: 50px;"/></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+      <li th:class="${#httpServletRequest.requestURI == '/' ? 'nav-item active' : 'nav-item'}">
+        <a class="nav-link" th:href="@{/}">Home</a>
       </li>
-      <li class="nav-item" sec:authorize="hasAnyRole('ROLE_ADMIN')">
+      <li th:class="${#httpServletRequest.requestURI == '/admin' ? 'nav-item active' : 'nav-item'}" sec:authorize="hasAnyRole('ROLE_ADMIN')">
         <a class="nav-link" th:href="@{/admin}">Anmeldeliste</a>
       </li>
-      <li class="nav-item" sec:authorize="hasAnyRole('ROLE_ADMIN')">
+      <li th:class="${#httpServletRequest.requestURI == '/mapping' ? 'nav-item active' : 'nav-item'}" sec:authorize="hasAnyRole('ROLE_ADMIN')">
           <a class="nav-link" th:href="@{/mapping}">Briefpartnerliste</a>
       </li>
     </ul>

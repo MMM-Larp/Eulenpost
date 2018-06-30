@@ -88,6 +88,28 @@ public class ViewController {
         return "admin";
     }
 
+    @RequestMapping(value = "/admin/edit/{id}")
+    public String onEditEntry(Model model, @PathVariable long id) {
+        Entry e = entryService.getEntryById(id);
+        model.addAttribute("entry", e);
+
+        return "edit-entry";
+    }
+
+    @RequestMapping(value = "/admin/delete/{id}")
+    public String onDeleteEntry(@PathVariable long id) {
+        Entry e = entryService.getEntryById(id);
+        entryService.delete(e);
+
+        return "redirect:/admin";
+    }
+
+    @PostMapping(value = "/admin/saveEdit")
+    public String onSaveEdit(@Validated @ModelAttribute("entry") Entry entry) {
+        entryService.saveEntry(entry);
+        return "redirect:/admin";
+    }
+
     @PostMapping(value = "/register")
     public String onFormSubmit(Model model, @Validated @ModelAttribute("entry") Entry entry, BindingResult result) {
         if(result.hasErrors()) {
@@ -104,7 +126,7 @@ public class ViewController {
             final Context templateData = new Context();
             templateData.setVariable("entry", entry);
 
-            String htmlContent = templateEngine.process("email/optInEmail", templateData);
+            String htmlContent = templateEngine.process("email/opt-in-mail", templateData);
             message.setText(htmlContent, true);
         };
 
@@ -127,10 +149,9 @@ public class ViewController {
 
                 final Context templateData = new Context();
                 templateData.setVariable("sender", m.getSender());
-                templateData.setVariable("receiverOne", m.getReceiverOne());
-                templateData.setVariable("receiverTwo", m.getReceiverTwo());
+                templateData.setVariable("receivers", m.getReceivers());
 
-                String htmlContent = templateEngine.process("email/rollMail", templateData);
+                String htmlContent = templateEngine.process("email/roll-mail", templateData);
                 message.setText(htmlContent, true);
             };
 
@@ -177,18 +198,8 @@ public class ViewController {
     public String onRoll() {
         mappingService.clearMappings();
 
-        while(true) {
-            List<Entry> senders = entryService.getAllEntries();
-            List<Entry> receiverOne = entryService.getShuffledEntries();
-            List<Entry> receiverTwo = entryService.getShuffledEntries();
-
-            if(senders.size() >= 3) {
-                if (mappingService.isShuffleCorrect(senders, receiverOne, receiverTwo)) {
-                    mappingService.saveMapping(senders, receiverOne, receiverTwo);
-                    break;
-                }
-            }
-        }
+        List<Entry> entries = entryService.getAllEntries();
+        mappingService.saveMapping(entries);
 
         return "redirect:/mapping";
     }
@@ -206,7 +217,10 @@ public class ViewController {
 
     @PostMapping(value = "/admin/saveDescription")
     public String onSaveDescription(@ModelAttribute Content content) {
-        contentService.saveContent(content);
+        Content c = contentService.getContent();
+        c.setDescription(content.getDescription());
+        contentService.saveContent(c);
+
         return "redirect:/";
     }
 
@@ -215,12 +229,14 @@ public class ViewController {
     public String onTestData() {
         List<String> firstNames = Arrays.asList("Hannah", "Eddie", "Remus", "Lily", "James", "Amycus", "Devon", "Sirius", "Reginald", "Eve");
         List<String> lastNames = Arrays.asList("Ward", "Deimos", "Lupin", "Evans", "Potter", "Carrow", "Avery", "Black", "Cattermole", "Edgecomb");
+        List<String> otNames = Arrays.asList("Maxi", "Jen", "Joshi", "Hannah", "Liz", "Kashi", "Max", "Ella", "Saki");
 
         Random r = new Random();
         for(int i = 0; i < 6; i++) {
             String firstName = firstNames.get(r.nextInt(firstNames.size()));
             String nickName = firstNames.get(r.nextInt(firstNames.size()));
             String lastName = lastNames.get(r.nextInt(lastNames.size()));
+            String otName = lastNames.get(r.nextInt(otNames.size()));
 
             House house = House.values()[r.nextInt(House.values().length)];
             String note = UUID.randomUUID().toString();
@@ -229,6 +245,7 @@ public class ViewController {
 
             Entry e = new Entry();
             e.setFirstName(firstName);
+            e.setOtName(otName);
             e.setNickName(nickName);
             e.setLastName(lastName);
             e.setHouse(house);
