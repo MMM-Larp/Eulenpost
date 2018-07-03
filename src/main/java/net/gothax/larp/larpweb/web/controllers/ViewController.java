@@ -139,7 +139,7 @@ public class ViewController {
             message.setText(htmlContent, true);
         };
 
-        //mailSender.send(preparator);
+        mailSender.send(preparator);
         entryService.saveEntry(entry);
 
         return "thank-you";
