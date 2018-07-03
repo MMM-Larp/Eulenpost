@@ -16,9 +16,6 @@ public class Content {
     @Column
     private boolean allowSignUp;
 
-    @Column
-    private Date closeDate;
-
     public String getDescription() {
         return description;
     }
@@ -41,13 +38,5 @@ public class Content {
 
     public void setAllowSignUp(boolean allowSignUp) {
         this.allowSignUp = allowSignUp;
-    }
-
-    public Date getCloseDate() {
-        return closeDate;
-    }
-
-    public void setCloseDate(Date closeDate) {
-        this.closeDate = closeDate;
     }
 }

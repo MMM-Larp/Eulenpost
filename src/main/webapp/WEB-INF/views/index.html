@@ -12,7 +12,7 @@
 
 <div class="container">
 
-  <div class="jumbotron">
+  <div class="jumbotron mt-5">
     <h1 class="display-4">M.M.M. e.V. | Eulenpost-o-mat</h1>
 
     <div>
@@ -40,27 +40,27 @@
     <div th:if="${content.allowSignUp}">
         <hr class="my-4">
         <form th:object="${entry}" th:action="@{/register}" method="post">
-      <div class="form-group col-6">
+      <div class="form-group">
         <label for="inputEmail">Email-Adresse</label>
         <input type="text" class="form-control" id="inputEmail" th:field="*{email}" placeholder="Email" required>
       </div>
-            <div class="form-group col-6">
+            <div class="form-group">
                 <label for="firstName">Name (OT)</label>
                 <input type="text" class="form-control" id="otName" th:field="*{otName}" placeholder="Newt Scamander" required>
             </div>
-      <div class="form-group col-6">
+      <div class="form-group">
         <label for="firstName">Vorname (IT)</label>
         <input type="text" class="form-control" id="firstName" th:field="*{firstName}" placeholder="Vorname" required>
     </div>
-        <div class="form-group col-6">
+        <div class="form-group">
             <label for="firstName">Ruf- oder Spitzname (IT, optional)</label>
             <input type="text" class="form-control" id="nickName" th:field="*{nickName}" placeholder="Ruf- oder Spitzname">
         </div>
-      <div class="form-group col-6">
+      <div class="form-group">
         <label for="lastName">Nachname (IT)</label>
         <input type="text" class="form-control" id="lastName" th:field="*{lastName}" placeholder="Nachname" required>
       </div>
-      <div class="form-group col-6">
+      <div class="form-group">
           <label for="house">Hogwarts-Haus</label>
           <select class="form-control" id="house" th:field="*{house}" required>
             <option value="">- bitte wählen -</option>
@@ -76,7 +76,7 @@
             Hinweis: Dieses Feld ist dafür da, dass du deinen anonymen Sendern bestimmte Nachrichten zukommen lassen kannst. <br>
             Bspw. "Bitte keine Briefe von engen Verwandten!", "Keine Schokolade, ich bin laktoseintolerant!" etc.
         </label>
-        <div class="col-6">
+        <div>
             <textarea class="form-control" rows="4" id="note" th:field="*{note}"></textarea>
         </div>
       </div>

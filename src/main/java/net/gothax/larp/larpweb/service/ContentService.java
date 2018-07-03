@@ -17,7 +17,10 @@ public class ContentService {
 
     public Content getContent() {
         List<Content> c = contentRepository.findAll();
-        return c.get(0);
+        if(c.size() > 0)
+            return c.get(0);
+        else
+            return null;
     }
 
     public void saveContent(Content content) {

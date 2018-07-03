@@ -12,7 +12,7 @@ public class Mapping {
     @Column(unique = true, nullable = false)
     private Long id;
 
-    @Column
+    @OneToOne
     private Entry sender;
 
     @Column

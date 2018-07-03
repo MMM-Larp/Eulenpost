@@ -57,7 +57,15 @@ public class ViewController {
     @RequestMapping("/")
     public String onIndex(Model model) {
         model.addAttribute("entry", new Entry());
+
         Content content = contentService.getContent();
+        if(content == null) {
+            content = new Content();
+            content.setAllowSignUp(true);
+            content.setDescription("Default-Message");
+            contentService.saveContent(content);
+        }
+
         model.addAttribute("content", content);
 
         return "index";
@@ -130,7 +138,7 @@ public class ViewController {
             message.setText(htmlContent, true);
         };
 
-        mailSender.send(preparator);
+        //mailSender.send(preparator);
         entryService.saveEntry(entry);
 
         return "thank-you";
