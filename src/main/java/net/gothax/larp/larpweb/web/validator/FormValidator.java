@@ -24,20 +24,27 @@ public class FormValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors,"house", "required", "Bitte gib dein Haus (IT) an.");
 
         rejectIfNoPrivacy(errors);
+        rejectIfNoRules(errors);
         rejectIfNoEmail(errors);
     }
 
     private void rejectIfNoPrivacy(Errors errors) {
         boolean privacy = Boolean.valueOf(Objects.requireNonNull(errors.getFieldValue("privacy")).toString());
-        if(!privacy)
+        if (!privacy)
             errors.rejectValue("privacy", "required", "Datenschutzerklärung muss zugestimmt werden");
+    }
+
+    private void rejectIfNoRules(Errors errors) {
+        boolean rules = Boolean.valueOf(Objects.requireNonNull(errors.getFieldValue("rules")).toString());
+        if (!rules)
+            errors.rejectValue("rules", "required", "Bitte stimme den Regeln zu.");
     }
 
     private void rejectIfNoEmail(Errors errors) {
         String value = (String) errors.getFieldValue("email");
         if (value != null) {
             if (!isEmail(value) || value.isEmpty())
-                errors.rejectValue("email", "required", "Bitte gebe eine gültige Email-Adresse an!");
+                errors.rejectValue("email", "required", "Bitte gib eine gültige Email-Adresse an!");
         }
     }
 
