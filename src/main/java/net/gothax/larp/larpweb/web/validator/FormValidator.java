@@ -36,8 +36,8 @@ public class FormValidator implements Validator {
     private void rejectIfNoEmail(Errors errors) {
         String value = (String) errors.getFieldValue("email");
         if (value != null) {
-            if (!isEmail(value) && !value.isEmpty())
-                errors.rejectValue("email", "required", "Bitte gib deine E-Mail Adresse ein!");
+            if (!isEmail(value) || value.isEmpty())
+                errors.rejectValue("email", "required", "Bitte gebe eine gültige Email-Adresse an!");
         }
     }
 

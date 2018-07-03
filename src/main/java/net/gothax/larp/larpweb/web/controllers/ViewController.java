@@ -122,6 +122,7 @@ public class ViewController {
     public String onFormSubmit(Model model, @Validated @ModelAttribute("entry") Entry entry, BindingResult result) {
         if(result.hasErrors()) {
             model.addAttribute("content", contentService.getContent());
+          //  model.addAttribute("entry", entry);
             return "index";
         }
 
