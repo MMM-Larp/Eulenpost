@@ -13,7 +13,8 @@
 <div class="container">
   <div class="jumbotron mt-5">
     <h1 class="display-4">M.M.M. e.V. | Eulenpost-o-mat</h1>
-
+    <br>
+    <br>
     <div>
       <p class="lead" id="description-box" th:text="${content.description}">
         <a href="#" sec:authorize="hasAnyRole('ROLE_ADMIN')" id="cmd-edit-notes" class="btn default btn-xs">
@@ -46,24 +47,24 @@
 
         <div class="form-group">
           <label for="firstName">Name (OT)</label>
-          <input type="text" class="form-control" id="otName" th:field="*{otName}" placeholder="Newt Scamander" th:classappend="${#fields.hasErrors('otName')}? 'is-invalid'">
+          <input type="text" class="form-control" id="otName" th:field="*{otName}" placeholder="Daniel Radcliffe" th:classappend="${#fields.hasErrors('otName')}? 'is-invalid'">
           <div class="invalid-feedback" th:if="${#fields.hasErrors('otName')}" th:errors="*{otName}"></div>
         </div>
 
         <div class="form-group">
           <label for="firstName">Vorname (IT)</label>
-          <input type="text" class="form-control" id="firstName" th:field="*{firstName}" placeholder="Vorname" th:classappend="${#fields.hasErrors('firstName')}? 'is-invalid'">
+          <input type="text" class="form-control" id="firstName" th:field="*{firstName}" placeholder="Harry" th:classappend="${#fields.hasErrors('firstName')}? 'is-invalid'">
           <div class="invalid-feedback" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
         </div>
 
         <div class="form-group">
           <label for="firstName">Ruf- oder Spitzname (IT, optional)</label>
-          <input type="text" class="form-control" id="nickName" th:field="*{nickName}" placeholder="Ruf- oder Spitzname">
+          <input type="text" class="form-control" id="nickName" th:field="*{nickName}" placeholder="Precious Potter">
         </div>
 
         <div class="form-group">
           <label for="lastName">Nachname (IT)</label>
-          <input type="text" class="form-control" id="lastName" th:field="*{lastName}" placeholder="Nachname" th:classappend="${#fields.hasErrors('lastName')}? 'is-invalid'">
+          <input type="text" class="form-control" id="lastName" th:field="*{lastName}" placeholder="Potter" th:classappend="${#fields.hasErrors('lastName')}? 'is-invalid'">
           <div class="invalid-feedback" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
         </div>
 
