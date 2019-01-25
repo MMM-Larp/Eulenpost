@@ -130,7 +130,7 @@ public class ViewController {
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
             message.setFrom("mailer@gothax.net");
             message.setTo(entry.getEmail());
-            message.setSubject("M.M.M. LARP - Eulenpost-O-Mat Anmeldung");
+            message.setSubject("M.M.M. LARP - Eulenpost-O-Mat - Anmeldung");
 
             final Context templateData = new Context();
             templateData.setVariable("entry", entry);
@@ -154,7 +154,7 @@ public class ViewController {
                 MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
                 message.setFrom("mailer@gothax.net");
                 message.setTo(m.getSender().getEmail());
-                message.setSubject("M.M.M. LARP - Deine Empfänger");
+                message.setSubject("M.M.M. LARP - Eulenpost-O-Mat - Deine Briefpartner");
 
                 final Context templateData = new Context();
                 templateData.setVariable("sender", m.getSender());
